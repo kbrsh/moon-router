@@ -1,0 +1,36 @@
+{
+  "name": "moon-router",
+  "version": "0.0.1",
+  "description": "Router Plugin for Moon",
+  "main": "dist/moon-router.js",
+  "scripts": {
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KingPixil/moon-router.git"
+  },
+  "keywords": [
+    "moon",
+    "router",
+    "router",
+    "route",
+    "moon"
+  ],
+  "author": "Kabir Shah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KingPixil/moon-router/issues"
+  },
+  "homepage": "https://github.com/KingPixil/moon-router#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-buble": "^0.8.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-header": "^1.8.8",
+    "gulp-include": "^2.3.1",
+    "gulp-replace": "^0.5.4",
+    "gulp-size": "^2.1.0",
+    "gulp-uglifyjs": "^0.6.2"
+  }
+}
