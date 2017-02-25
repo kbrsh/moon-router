@@ -46,7 +46,7 @@ function MoonRouter(opts) {
 }
 
 // Install MoonRouter to Moon Instance
-MoonRouter.prototype.install = (instance) => {
+MoonRouter.prototype.install = function(instance) {
   this.instance = instance;
 }
 

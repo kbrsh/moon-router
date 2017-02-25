@@ -10,8 +10,6 @@
   /* ======= Global Moon Router ======= */
   (typeof module === "object" && module.exports) ? module.exports = factory() : root.MoonRouter = factory();
 }(this, function() {
-    
-    var this$1 = this;
     var goTo = function (instance, path) {
       window.location.hash = path;
       instance.current = {
@@ -70,8 +68,8 @@
     }
     
     // Install MoonRouter to Moon Instance
-    MoonRouter.prototype.install = function (instance) {
-      this$1.instance = instance;
+    MoonRouter.prototype.install = function(instance) {
+      this.instance = instance;
     }
     
     // Init for Plugin
