@@ -1,4 +1,4 @@
-//=include ./util/goto.js
+//=require ./util/goto.js
 
 function MoonRouter(opts) {
   this.default = opts.default || '/';
