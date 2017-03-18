@@ -3,13 +3,14 @@ const run = (instance, path) => {
   const parts = path.slice(1).split("/");
   let currentMapState = instance.map;
   let context = {
-    query: {}
+    query: {},
+    params: {}
   }
 
   for(var i = 0; i < parts.length; i++) {
     let part = parts[i];
 
-    // Look for Query String
+    // Query Parameters
     if(part.indexOf("?") !== -1) {
       const splitQuery = part.split("?");
       part = splitQuery.shift();
@@ -20,13 +21,32 @@ const run = (instance, path) => {
       }
     }
 
+    // Wildcard
+    if(currentMapState["*"]) {
+      part = "*";
+    }
+
+    // Named Parameters
+    if(currentMapState[":"]) {
+      const paramName = currentMapState[":"];
+      context.params[paramName] = part;
+      part = `:${paramName}`;
+    }
+
+    // Move through State
     currentMapState = currentMapState[part];
 
-    // Not Found
+    // Path Not In Map
     if(!currentMapState) {
       run(instance, instance.default);
       return false;
     }
+  }
+
+  // Handler not in Map
+  if(!currentMapState['@']) {
+    run(instance, instance.default);
+    return false;
   }
 
   instance.current = {

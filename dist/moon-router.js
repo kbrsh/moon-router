@@ -15,13 +15,14 @@
       var parts = path.slice(1).split("/");
       var currentMapState = instance.map;
       var context = {
-        query: {}
+        query: {},
+        params: {}
       }
     
       for(var i = 0; i < parts.length; i++) {
         var part = parts[i];
     
-        // Look for Query String
+        // Query Parameters
         if(part.indexOf("?") !== -1) {
           var splitQuery = part.split("?");
           part = splitQuery.shift();
@@ -32,13 +33,32 @@
           }
         }
     
+        // Wildcard
+        if(currentMapState["*"]) {
+          part = "*";
+        }
+    
+        // Named Parameters
+        if(currentMapState[":"]) {
+          var paramName = currentMapState[":"];
+          context.params[paramName] = part;
+          part = ":" + paramName;
+        }
+    
+        // Move through State
         currentMapState = currentMapState[part];
     
-        // Not Found
+        // Path Not In Map
         if(!currentMapState) {
           run(instance, instance.default);
           return false;
         }
+      }
+    
+      // Handler not in Map
+      if(!currentMapState['@']) {
+        run(instance, instance.default);
+        return false;
       }
     
       instance.current = {
@@ -59,13 +79,23 @@
     
       for(var route in routes) {
         var currentMapState = routesMap;
+    
+        // Split up by Parts
         var parts = route.slice(1).split("/");
         for(var i = 0; i < parts.length; i++) {
           var part = parts[i];
+    
+          // Found Named Parameter
+          if(part[0] === ":") {
+            currentMapState[":"] = part.slice(1);
+          }
+    
+          // Add Part to Map
           currentMapState[part] = {};
           currentMapState = currentMapState[part];
         }
     
+        // Add Component
         currentMapState["@"] = routes[route];
       }
     
