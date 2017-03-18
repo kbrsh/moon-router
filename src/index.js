@@ -1,20 +1,30 @@
-//=require ./util/goto.js
+//=require ./util/run.js
+//=require ./util/map.js
 
 function MoonRouter(opts) {
+  // Moon Instance
+  this.instance = null;
+
+  // Default Route
   this.default = opts.default || '/';
-  this.map = opts.map || {};
-  this.instance = false;
+
+  // Route to Component Map
+  this.map = map(this, opts.map) || {};
+
+  // Current Path
   this.current = {
-    path: this.default,
-    component: this.map[this.default]
+    path: window.location.hash.slice(1) || window.location.pathname,
+    component: null
   };
-  var self = this;
+
+  // Alias to Access Instance
+  let self = this;
 
   // Setup Router View Component
   MoonRouter.Moon.component("router-view", {
     functional: true,
     render: function(h) {
-      return h(self.current.component, {}, {shouldRender: true, eventListeners: {}});
+      return h(self.current.component, {attrs: {}}, {shouldRender: true, eventListeners: {}});
     }
   });
 
@@ -22,27 +32,18 @@ function MoonRouter(opts) {
   MoonRouter.Moon.component("router-link", {
     functional: true,
     props: ['to'],
-    render: function(h, ctx) {
-      var navigate = function(e, path) {
-        e.preventDefault();
-        goTo(self, path);
-      }
-      return h('a', {
-        href: "#" + ctx.data.to, class: self.current.path === ctx.data.to ? "router-link-active" : ""
-      }, {
-        shouldRender: true,
-        eventListeners: {
-        click: [function(e) {
-          navigate(e, ctx.data.to)
-        }]
-      }}, ctx.slots.default);
+    render: function(h, state) {
+      return h('a', {attrs: {href: `#${state.data['to']}`}}, {shouldRender: true, eventListeners: {}}, state.slots['default']);
     }
   });
 
-  // Get hash (without '#') or the pathname
-  var startRoute = window.location.hash.slice(1) || window.location.pathname;
-  // Go to this url
-  goTo(this, startRoute);
+  // Attach Event Listener
+  window.onhashchange = function() {
+    run(self, window.location.hash.slice(1) || window.location.pathname);
+  }
+
+  // Initialize Route
+  run(this, this.current.path);
 }
 
 // Install MoonRouter to Moon Instance
