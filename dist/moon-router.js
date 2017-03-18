@@ -14,10 +14,27 @@
       // Change Current Component and Build
       var parts = path.slice(1).split("/");
       var currentMapState = instance.map;
+      var context = {
+        query: {}
+      }
     
       for(var i = 0; i < parts.length; i++) {
         var part = parts[i];
-        currentMapState = currentMapState[parts[i]];
+    
+        // Look for Query String
+        if(part.indexOf("?") !== -1) {
+          var splitQuery = part.split("?");
+          part = splitQuery.shift();
+    
+          for(var j = 0; j < splitQuery.length; j++) {
+            var keyVal = splitQuery[j].split('=');
+            context.query[keyVal[0]] = keyVal[1];
+          }
+        }
+    
+        currentMapState = currentMapState[part];
+    
+        // Not Found
         if(!currentMapState) {
           run(instance, instance.default);
           return false;
