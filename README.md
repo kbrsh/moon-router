@@ -53,6 +53,31 @@ This will map `/` to the `Root` component, and will map `/hello` to the `Hello` 
 
 The `default` route is `/`, if a URL is not found, Moon will display this route.
 
+##### Dynamic Routes
+
+Routes can also be dynamic, with support for query parameters, named parameters, and wildcards. These can be accessed via a `route` prop passed to the view component.
+
+```js
+var router = new MoonRouter({
+  map: {
+    "/:named": "Root", // `named` can be shown with {{route.params.named}}
+    "/:other/parameter/that/is/:named": "Named",
+    "/*": "Wildcard" // matches any ONE path
+  }
+});
+```
+
+* Named Parameters are in the `route.params` object
+* Query Parameters are in the `route.query` object (`/?key=val`)
+
+Just remember, to access the special `route` variable, you must state it is a prop in the component, like:
+
+```js
+Moon.component("Named", {
+  props: ['route'],
+  template: '<h1></h1>'
+});
+```
 
 #### Define Components
 
