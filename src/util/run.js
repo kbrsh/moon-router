@@ -35,6 +35,7 @@ const run = (instance, path) => {
   };
 
   if(instance.instance) {
+    instance.instance.$data.route = context;
     instance.instance.build();
   }
 

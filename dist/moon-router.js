@@ -47,6 +47,7 @@
       };
     
       if(instance.instance) {
+        instance.instance.$data.route = context;
         instance.instance.build();
       }
     
@@ -95,7 +96,7 @@
       MoonRouter.Moon.component("router-view", {
         functional: true,
         render: function(h) {
-          return h(self.current.component, {attrs: {}}, {shouldRender: true, eventListeners: {}});
+          return h(self.current.component, {attrs: {route: self.instance.$data.route}}, {shouldRender: true, eventListeners: {}});
         }
       });
     

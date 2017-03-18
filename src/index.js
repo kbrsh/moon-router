@@ -24,7 +24,7 @@ function MoonRouter(opts) {
   MoonRouter.Moon.component("router-view", {
     functional: true,
     render: function(h) {
-      return h(self.current.component, {attrs: {}}, {shouldRender: true, eventListeners: {}});
+      return h(self.current.component, {attrs: {route: self.instance.$data.route}}, {shouldRender: true, eventListeners: {}});
     }
   });
 
