@@ -15,7 +15,9 @@ const map = (instance, routes) => {
       }
 
       // Add Part to Map
-      currentMapState[part] = {};
+      if(!currentMapState[part]) {
+          currentMapState[part] = {};
+      }
       currentMapState = currentMapState[part];
     }
 

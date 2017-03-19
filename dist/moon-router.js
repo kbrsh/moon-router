@@ -1,5 +1,5 @@
 /*
-* Moon Router v0.0.1
+* Moon Router v0.0.2
 * Copyright 2016-2017, Kabir Shah
 * https://github.com/KingPixil/moon-router/
 * Free to use under the MIT license.
@@ -91,7 +91,9 @@
           }
     
           // Add Part to Map
-          currentMapState[part] = {};
+          if(!currentMapState[part]) {
+              currentMapState[part] = {};
+          }
           currentMapState = currentMapState[part];
         }
     
