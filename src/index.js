@@ -12,10 +12,14 @@ function MoonRouter(opts) {
   this.map = map(this, opts.map) || {};
 
   // Current Path
+  const initPath = window.location.hash.slice(1);
   this.current = {
-    path: window.location.hash.slice(1) || window.location.pathname,
+    path: initPath || "/",
     component: null
   };
+  if(initPath !== this.current.path) {
+    window.location.hash = this.current.path;
+  }
 
   // Alias to Access Instance
   let self = this;
