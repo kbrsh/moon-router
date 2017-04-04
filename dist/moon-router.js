@@ -66,8 +66,11 @@
         component: currentMapState['@']
       };
     
+      // Setup Route Context
+      instance.route = context;
+    
+      // Build Moon Instance
       if(instance.instance) {
-        instance.instance.$data.route = context;
         instance.instance.build();
       }
     
@@ -125,6 +128,9 @@
         window.location.hash = this.current.path;
       }
     
+      // Route Context
+      this.route = {};
+    
       // Alias to Access Instance
       var self = this;
     
@@ -132,7 +138,7 @@
       MoonRouter.Moon.component("router-view", {
         functional: true,
         render: function(h) {
-          return h(self.current.component, {attrs: {route: self.instance.$data.route}}, {shouldRender: true, eventListeners: {}});
+          return h(self.current.component, {attrs: {route: self.route}}, {shouldRender: true, eventListeners: {}});
         }
       });
     

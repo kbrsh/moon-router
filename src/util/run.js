@@ -54,8 +54,11 @@ const run = (instance, path) => {
     component: currentMapState['@']
   };
 
+  // Setup Route Context
+  instance.route = context;
+
+  // Build Moon Instance
   if(instance.instance) {
-    instance.instance.$data.route = context;
     instance.instance.build();
   }
 
