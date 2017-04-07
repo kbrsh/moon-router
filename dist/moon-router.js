@@ -1,5 +1,5 @@
 /*
-* Moon Router v0.0.3
+* Moon Router v0.0.4
 * Copyright 2016-2017, Kabir Shah
 * https://github.com/KingPixil/moon-router/
 * Free to use under the MIT license.
@@ -138,7 +138,7 @@
       MoonRouter.Moon.component("router-view", {
         functional: true,
         render: function(h) {
-          return h(self.current.component, {attrs: {route: self.route}}, {shouldRender: true, eventListeners: {}});
+          return h(self.current.component, {attrs: {route: self.route}}, {shouldRender: true, eventListeners: {}}, []);
         }
       });
     
