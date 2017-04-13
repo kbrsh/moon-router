@@ -94,7 +94,7 @@
           }
     
           // Add Part to Map
-          if(!currentMapState[part]) {
+          if(currentMapState[part] === undefined) {
               currentMapState[part] = {};
           }
           currentMapState = currentMapState[part];
