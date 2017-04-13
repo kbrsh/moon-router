@@ -1,4 +1,4 @@
-const map = (instance, routes) => {
+const map = (routes) => {
   let routesMap = {};
 
   for(let route in routes) {

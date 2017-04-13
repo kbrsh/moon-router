@@ -9,7 +9,7 @@ function MoonRouter(opts) {
   this.default = opts.default || '/';
 
   // Route to Component Map
-  this.map = map(this, opts.map) || {};
+  this.map = map(opts.map) || {};
 
   // Current Path
   const initPath = window.location.hash.slice(1);

@@ -77,7 +77,7 @@
       return true;
     }
     
-    var map = function (instance, routes) {
+    var map = function (routes) {
       var routesMap = {};
     
       for(var route in routes) {
@@ -116,7 +116,7 @@
       this.default = opts.default || '/';
     
       // Route to Component Map
-      this.map = map(this, opts.map) || {};
+      this.map = map(opts.map) || {};
     
       // Current Path
       var initPath = window.location.hash.slice(1);
