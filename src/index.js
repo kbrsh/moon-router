@@ -21,6 +21,9 @@ function MoonRouter(opts) {
     window.location.hash = this.current.path;
   }
 
+  // Route Context
+  this.route = {};
+
   // Alias to Access Instance
   let self = this;
 
@@ -28,7 +31,7 @@ function MoonRouter(opts) {
   MoonRouter.Moon.component("router-view", {
     functional: true,
     render: function(h) {
-      return h(self.current.component, {attrs: {}}, {shouldRender: true, eventListeners: {}}, []);
+      return h(self.current.component, {attrs: {route: self.route}}, {shouldRender: true, eventListeners: {}}, []);
     }
   });
 
