@@ -33,16 +33,15 @@
           }
         }
     
-        // Wildcard
-        if(currentMapState["*"]) {
-          part = "*";
-        }
-    
-        // Named Parameters
-        if(currentMapState[":"]) {
-          var paramName = currentMapState[":"];
-          context.params[paramName] = part;
-          part = ":" + paramName;
+        if(currentMapState[part] === undefined) {
+          if(currentMapState["*"]) {
+            // Wildcard
+            part = "*";
+          } else if(currentMapState[":"]) {
+            // Named Parameters
+            context.params[currentMapState[":"].name] = part;
+            part = ":";
+          }
         }
     
         // Move through State
@@ -90,7 +89,11 @@
     
           // Found Named Parameter
           if(part[0] === ":") {
-            currentMapState[":"] = part.slice(1);
+            var named = {
+              name: part.slice(1)
+            }
+            currentMapState[":"] = named;
+            part = ":"
           }
     
           // Add Part to Map

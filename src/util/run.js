@@ -21,16 +21,15 @@ const run = (instance, path) => {
       }
     }
 
-    // Wildcard
-    if(currentMapState["*"]) {
-      part = "*";
-    }
-
-    // Named Parameters
-    if(currentMapState[":"]) {
-      const paramName = currentMapState[":"];
-      context.params[paramName] = part;
-      part = `:${paramName}`;
+    if(currentMapState[part] === undefined) {
+      if(currentMapState["*"]) {
+        // Wildcard
+        part = "*";
+      } else if(currentMapState[":"]) {
+        // Named Parameters
+        context.params[currentMapState[":"].name] = part;
+        part = ":";
+      }
     }
 
     // Move through State

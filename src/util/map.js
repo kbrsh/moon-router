@@ -7,11 +7,15 @@ const map = (routes) => {
     // Split up by Parts
     const parts = route.slice(1).split("/");
     for(var i = 0; i < parts.length; i++) {
-      const part = parts[i];
+      let part = parts[i];
 
       // Found Named Parameter
       if(part[0] === ":") {
-        currentMapState[":"] = part.slice(1);
+        let named = {
+          name: part.slice(1)
+        }
+        currentMapState[":"] = named;
+        part = ":"
       }
 
       // Add Part to Map
