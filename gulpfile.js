@@ -10,7 +10,12 @@ var concat = require("gulp-concat");
 var header = require("gulp-header");
 var size = require("gulp-size");
 
-var comment = '\/*\r\n* Moon Router v' + pkg.version + '\r\n* Copyright 2016-2017, Kabir Shah\r\n* https:\/\/github.com\/KingPixil\/moon-router\/\r\n* Free to use under the MIT license.\r\n* https:\/\/kingpixil.github.io\/license\r\n*\/\r\n';
+var comment = `/**
+ * Moon Router v${pkg.version}
+ * Copyright 2016-2017 Kabir Shah
+ * Released under the MIT License
+ * https://github.com/KingPixil/moon-router
+ */\r\n`;
 
 // Build Moon Router
 gulp.task('transpile', function () {

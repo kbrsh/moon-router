@@ -1,10 +1,9 @@
-/*
-* Moon Router v0.0.4
-* Copyright 2016-2017, Kabir Shah
-* https://github.com/KingPixil/moon-router/
-* Free to use under the MIT license.
-* https://kingpixil.github.io/license
-*/
+/**
+ * Moon Router v0.0.4
+ * Copyright 2016-2017 Kabir Shah
+ * Released under the MIT License
+ * https://github.com/KingPixil/moon-router
+ */
 
 (function(root, factory) {
   /* ======= Global Moon Router ======= */
