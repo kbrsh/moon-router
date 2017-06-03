@@ -147,9 +147,11 @@
       // Setup Router Link Component
       MoonRouter.Moon.component("router-link", {
         functional: true,
-        props: ['to'],
         render: function(h, state) {
-          return h('a', {attrs: {href: ("#" + (state.data['to']))}}, {shouldRender: true, eventListeners: {}}, state.slots['default']);
+          var data = state.data;
+          data['href'] = "#" + (data['to']);
+          delete data['to'];
+          return h('a', {attrs: data}, {shouldRender: true, eventListeners: {}}, state.slots['default']);
         }
       });
     
