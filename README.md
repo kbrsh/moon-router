@@ -85,21 +85,17 @@ After initializing Moon Router, define any components referenced.
 
 ```js
 Moon.component("Root", {
-  template: `
-  <div>
+  template: `<div>
     <h1>Welcome to "/"</h1>
     <router-link to="/hello">To /hello</router-link>
-  </div>
-  `
+  </div>`
 });
 
 Moon.component("Hello", {
-  template: `
-  <div>
+  template: `<div>
     <h1>You have Reached "/hello"</h1>
     <router-link to="/">Back Home</router-link>
-  </div>
-  `
+  </div>`
 });
 ```
 
