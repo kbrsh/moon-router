@@ -30,19 +30,19 @@ function MoonRouter(opts) {
   // Setup Router View Component
   MoonRouter.Moon.component("router-view", {
     functional: true,
-    render: function(h) {
-      return h(self.current.component, {attrs: {route: self.route}}, {shouldRender: true, eventListeners: {}}, []);
+    render: function(m) {
+      return m(self.current.component, {attrs: {route: self.route}}, {shouldRender: true}, []);
     }
   });
 
   // Setup Router Link Component
   MoonRouter.Moon.component("router-link", {
     functional: true,
-    render: function(h, state) {
+    render: function(m, state) {
       const data = state.data;
       data['href'] = `#${data['to']}`;
       delete data['to'];
-      return h('a', {attrs: data}, {shouldRender: true, eventListeners: {}}, state.slots['default']);
+      return m('a', {attrs: data}, {shouldRender: true}, state.slots['default']);
     }
   });
 

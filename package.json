@@ -1,8 +1,8 @@
 {
   "name": "moon-router",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Router Plugin for Moon",
-  "main": "dist/moon-router.js",
+  "main": "dist/moon-router.min.js",
   "scripts": {
     "build": "gulp"
   },
