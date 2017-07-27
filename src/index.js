@@ -65,6 +65,7 @@ MoonRouter.init = (Moon) => {
   // Bind Current Moon to Moon Router
   MoonRouter.Moon = Moon;
   var MoonInit = Moon.prototype.init;
+  
   // Edit init for Moon to install Moon Router when given as an option
   Moon.prototype.init = function() {
     if(this.$options.router !== undefined) {

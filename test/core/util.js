@@ -1,3 +1,7 @@
+Moon.use(MoonRouter);
+
+var expect = chai.expect;
+
 if(document.getElementById("els")) {
   var els = document.getElementById("els");
 } else {
