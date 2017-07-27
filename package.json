@@ -4,7 +4,8 @@
   "description": "Router for Moon",
   "main": "dist/moon-router.min.js",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",

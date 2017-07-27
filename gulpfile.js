@@ -10,6 +10,8 @@ var concat = require("gulp-concat");
 var header = require("gulp-header");
 var size = require("gulp-size");
 
+var Server = require("karma").Server;
+
 var comment = `/**
  * Moon Router v${pkg.version}
  * Copyright 2016-2017 Kabir Shah
@@ -47,6 +49,14 @@ gulp.task('minify', ['build'], function() {
     }))
     .pipe(concat('moon-router.min.js'))
     .pipe(gulp.dest('./dist/'));
+});
+
+// Run tests
+gulp.task('test', function(done) {
+    new Server({
+      configFile: __dirname + '/test/karma.conf.js',
+      singleRun: true
+    }, done).start();
 });
 
 // Default task

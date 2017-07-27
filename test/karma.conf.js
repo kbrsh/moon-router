@@ -8,7 +8,7 @@ module.exports = function(config) {
       '../node_modules/moonjs/dist/moon.min.js',
       '../node_modules/chai/chai.js',
       './core/util.js',
-      './core/instance/*.js'
+      './core/instance/*.js',
       './core/route/*.js'
     ],
 
