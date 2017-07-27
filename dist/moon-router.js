@@ -1,5 +1,5 @@
 /**
- * Moon Router v0.0.5
+ * Moon Router v0.1.0
  * Copyright 2016-2017 Kabir Shah
  * Released under the MIT License
  * https://github.com/KingPixil/moon-router
@@ -47,14 +47,14 @@
         currentMapState = currentMapState[part];
     
         // Path Not In Map
-        if(!currentMapState) {
+        if(currentMapState === undefined) {
           run(instance, instance.default);
           return false;
         }
       }
     
       // Handler not in Map
-      if(!currentMapState['@']) {
+      if(currentMapState['@'] === undefined) {
         run(instance, instance.default);
         return false;
       }
@@ -68,7 +68,7 @@
       instance.route = context;
     
       // Build Moon Instance
-      if(instance.instance) {
+      if(instance.instance !== null) {
         instance.instance.build();
       }
     
@@ -139,19 +139,19 @@
       // Setup Router View Component
       MoonRouter.Moon.component("router-view", {
         functional: true,
-        render: function(h) {
-          return h(self.current.component, {attrs: {route: self.route}}, {shouldRender: true, eventListeners: {}}, []);
+        render: function(m) {
+          return m(self.current.component, {attrs: {route: self.route}}, {shouldRender: true}, []);
         }
       });
     
       // Setup Router Link Component
       MoonRouter.Moon.component("router-link", {
         functional: true,
-        render: function(h, state) {
+        render: function(m, state) {
           var data = state.data;
           data['href'] = "#" + (data['to']);
           delete data['to'];
-          return h('a', {attrs: data}, {shouldRender: true, eventListeners: {}}, state.slots['default']);
+          return m('a', {attrs: data}, {shouldRender: true}, state.slots['default']);
         }
       });
     

@@ -7,7 +7,7 @@ const run = (instance, path) => {
     params: {}
   }
 
-  for(var i = 0; i < parts.length; i++) {
+  for(let i = 0; i < parts.length; i++) {
     let part = parts[i];
 
     // Query Parameters
@@ -15,7 +15,7 @@ const run = (instance, path) => {
       const splitQuery = part.split("?");
       part = splitQuery.shift();
 
-      for(var j = 0; j < splitQuery.length; j++) {
+      for(let j = 0; j < splitQuery.length; j++) {
         const keyVal = splitQuery[j].split('=');
         context.query[keyVal[0]] = keyVal[1];
       }
@@ -36,14 +36,14 @@ const run = (instance, path) => {
     currentMapState = currentMapState[part];
 
     // Path Not In Map
-    if(!currentMapState) {
+    if(currentMapState === undefined) {
       run(instance, instance.default);
       return false;
     }
   }
 
   // Handler not in Map
-  if(!currentMapState['@']) {
+  if(currentMapState['@'] === undefined) {
     run(instance, instance.default);
     return false;
   }
@@ -57,7 +57,7 @@ const run = (instance, path) => {
   instance.route = context;
 
   // Build Moon Instance
-  if(instance.instance) {
+  if(instance.instance !== null) {
     instance.instance.build();
   }
 
