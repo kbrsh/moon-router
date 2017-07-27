@@ -2,6 +2,8 @@
 
 A router plugin for Moon.
 
+[![Build Status](https://travis-ci.org/KingPixil/moon-router.svg?branch=master)](https://travis-ci.org/KingPixil/moon-router)
+
 ### What?
 
 Moon router lets you create basic routes that map to different components. Clicking a `router-link` will update the view, and updates the URL. To the user, it seems like going on a new URL, but in reality, they are on the same page.
