@@ -51,7 +51,7 @@ function MoonRouter(opts) {
         if(data["class"] === undefined) {
           data["class"] = self.activeClass;
         } else {
-          data["class"] += self.activeClass;
+          data["class"] += ` ${self.activeClass}`;
         }
       }
 
