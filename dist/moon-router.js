@@ -115,7 +115,7 @@
       this.instance = null;
     
       // Default Route
-      this.default = opts.default || '/';
+      this.default = opts.default || "/";
     
       // Route to Component Map
       this.map = map(opts.map) || {};
@@ -133,6 +133,9 @@
       // Route Context
       this.route = {};
     
+      // Active Class
+      this.activeClass = opts.activeClass || "router-link-active";
+    
       // Alias to Access Instance
       var self = this;
     
@@ -149,9 +152,19 @@
         functional: true,
         render: function(m, state) {
           var data = state.data;
-          data['href'] = "#" + (data['to']);
-          delete data['to'];
-          return m('a', {attrs: data}, {shouldRender: true}, state.slots['default']);
+          var to = data["to"];
+          data["href"] = "#" + to;
+          delete data["to"];
+    
+          if(to === self.current.path) {
+            if(data["class"] === undefined) {
+              data["class"] = self.activeClass;
+            } else {
+              data["class"] += self.activeClass;
+            }
+          }
+    
+          return m('a', {attrs: data}, {shouldRender: true}, state.slots["default"]);
         }
       });
     
@@ -174,6 +187,7 @@
       // Bind Current Moon to Moon Router
       MoonRouter.Moon = Moon;
       var MoonInit = Moon.prototype.init;
+    
       // Edit init for Moon to install Moon Router when given as an option
       Moon.prototype.init = function() {
         if(this.$options.router !== undefined) {
