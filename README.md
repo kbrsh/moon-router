@@ -101,7 +101,7 @@ Moon.component("Hello", {
 });
 ```
 
-You will notice the `router-link` component. This is by default, rendered as an `a` tag, and should **always be used** to link to routes.
+You will notice the `router-link` component. This is by default, rendered as an `a` tag, and should **always be used** to link to routes. A class of `router-link-active` will be applied to the active link by default, unless another class is provided in `options.activeClass`.
 
 When clicking on this link, the user will be shown the new route at the `router-view` component (see below), and will not actually be going to a new page.
 
