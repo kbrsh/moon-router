@@ -16,6 +16,14 @@
     var namedParameterAlias = ":";
     var componentAlias = "@";
     
+    var defineProperty = function(obj, prop, value, def) {
+      if(value === undefined) {
+        obj[prop] = def;
+      } else {
+        obj[prop] = value;
+      }
+    }
+    
     var setup = function (instance, mode) {
       var getPath = null;
       var navigate = null;
@@ -27,7 +35,7 @@
           var path = window.location.hash.slice(1);
     
           if(path.length === 0) {
-            path = window.location.pathname;
+            path = "/";
           }
     
           return path;
@@ -46,12 +54,18 @@
       } else if(mode === "history") {
         // Setup Path Getter
         getPath = function() {
-          return window.location.pathname;
+          var path = window.location.pathname.substring(instance.base.length);
+    
+          if(path.length === 0) {
+            path = "/";
+          }
+    
+          return path;
         }
     
         // Create navigation function
         navigate = function(route) {
-          history.pushState(null, null, route);
+          history.pushState(null, null, instance.base + route);
           run(instance, route);
         }
     
@@ -90,17 +104,16 @@
           var data = state.data;
           var to = data["to"];
           var meta = {
-            shouldRender: true
+            shouldRender: true,
+            eventListeners: {}
           };
     
           if(instance.listener !== null) {
-            data["href"] = "" + to;
-            meta.eventListeners = {
-              "click": [function(event) {
-                event.preventDefault();
-                instance.listener(to);
-              }]
-            };
+            data["href"] = instance.base + to;
+            meta.eventListeners.click = [function(event) {
+              event.preventDefault();
+              instance.listener(to);
+            }];
           } else {
             data["href"] = "#" + to;
           }
@@ -234,17 +247,25 @@
       // Moon Instance
       this.instance = null;
     
+      // Base
+      defineProperty(this, "base", options.base, "");
+    
       // Default Route
-      this.default = options.default || "/";
+      defineProperty(this, "default", options["default"], "/");
     
       // Route to Component Map
-      this.map = map(options.map) || {};
+      var providedMap = options.map;
+      if(providedMap === undefined) {
+        this.map = {};
+      } else {
+        this.map = map(providedMap);
+      }
     
       // Route Context
       this.route = {};
     
       // Active Class
-      this.activeClass = options.activeClass || "router-link-active";
+      defineProperty(this, "activeClass", options["activeClass"], "router-link-active");
     
       // Register Components
       registerComponents(this, Moon);

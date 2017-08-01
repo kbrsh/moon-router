@@ -9,7 +9,7 @@ const setup = (instance, mode) => {
       let path = window.location.hash.slice(1);
 
       if(path.length === 0) {
-        path = window.location.pathname;
+        path = "/";
       }
 
       return path;
@@ -28,12 +28,18 @@ const setup = (instance, mode) => {
   } else if(mode === "history") {
     // Setup Path Getter
     getPath = function() {
-      return window.location.pathname;
+      let path = window.location.pathname.substring(instance.base.length);
+
+      if(path.length === 0) {
+        path = "/";
+      }
+
+      return path;
     }
 
     // Create navigation function
     navigate = function(route) {
-      history.pushState(null, null, route);
+      history.pushState(null, null, instance.base + route);
       run(instance, route);
     }
 

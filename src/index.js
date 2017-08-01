@@ -1,6 +1,7 @@
 let Moon = null;
 
 //=require ./util/constants.js
+//=require ./util/defineProperty.js
 //=require ./util/setup.js
 //=require ./util/components.js
 //=require ./util/map.js
@@ -10,17 +11,25 @@ function MoonRouter(options) {
   // Moon Instance
   this.instance = null;
 
+  // Base
+  defineProperty(this, "base", options.base, "");
+
   // Default Route
-  this.default = options.default || "/";
+  defineProperty(this, "default", options["default"], "/");
 
   // Route to Component Map
-  this.map = map(options.map) || {};
+  const providedMap = options.map;
+  if(providedMap === undefined) {
+    this.map = {};
+  } else {
+    this.map = map(providedMap);
+  }
 
   // Route Context
   this.route = {};
 
   // Active Class
-  this.activeClass = options.activeClass || "router-link-active";
+  defineProperty(this, "activeClass", options["activeClass"], "router-link-active");
 
   // Register Components
   registerComponents(this, Moon);

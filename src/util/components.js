@@ -14,17 +14,16 @@ const registerComponents = (instance, Moon) => {
       const data = state.data;
       const to = data["to"];
       let meta = {
-        shouldRender: true
+        shouldRender: true,
+        eventListeners: {}
       };
 
       if(instance.listener !== null) {
-        data["href"] = `${to}`;
-        meta.eventListeners = {
-          "click": [function(event) {
-            event.preventDefault();
-            instance.listener(to);
-          }]
-        };
+        data["href"] = instance.base + to;
+        meta.eventListeners.click = [function(event) {
+          event.preventDefault();
+          instance.listener(to);
+        }];
       } else {
         data["href"] = `#${to}`;
       }
