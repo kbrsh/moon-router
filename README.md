@@ -73,6 +73,23 @@ const router = new MoonRouter({
 
 This will route  `"/app/"` to `"Root"`, and `"/app/hello"` to `"Hello"`.
 
+##### History Mode
+
+Moon Router will use "hash" mode by default, meaning the URL will look something like: `/#/`. If you want routes to look more realistic, you must provide a `mode` option.
+
+```js
+const router = new MoonRouter({
+  default: "/",
+  map: {
+    "/": "Root",
+    "/hello": "Hello"
+  },
+  mode: "history"
+});
+```
+
+Still, if a user visits `"/hello"` in history mode, they will get a 404 response. Moon Router can only switch routes in history mode, not initialize them. For this, you must configure your server to always serve a single page but still keep the route.
+
 ##### Dynamic Routes
 
 Routes can also be dynamic, with support for query parameters, named parameters, and wildcards. These can be accessed via a `route` prop passed to the view component.
