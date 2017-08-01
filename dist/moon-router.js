@@ -102,20 +102,21 @@
           var data = state.data;
           var to = data["to"];
           var meta = {
-            shouldRender: true,
-            eventListeners: {}
+            shouldRender: true
           };
     
           var same = instance.current.path === to;
     
           if(instance.custom === true) {
             data["href"] = instance.base + to;
-            meta.eventListeners.click = [function(event) {
-              event.preventDefault();
-              if(same === false) {
-                instance.navigate(to);
-              }
-            }];
+            meta.eventListeners = {
+              "click": [function(event) {
+                event.preventDefault();
+                if(same === false) {
+                  instance.navigate(to);
+                }
+              }]
+            };
           } else {
             data["href"] = "#" + to;
           }
