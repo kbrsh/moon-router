@@ -11,8 +11,8 @@ const run = (instance, path) => {
     let part = parts[i];
 
     // Query Parameters
-    if(part.indexOf("?") !== -1) {
-      const splitQuery = part.split("?");
+    if(part.indexOf(queryAlias) !== -1) {
+      const splitQuery = part.split(queryAlias);
       part = splitQuery.shift();
 
       for(let j = 0; j < splitQuery.length; j++) {
@@ -22,13 +22,15 @@ const run = (instance, path) => {
     }
 
     if(currentMapState[part] === undefined) {
-      if(currentMapState["*"]) {
+      let namedParameter = null;
+
+      if(currentMapState[wildcardAlias] !== undefined) {
         // Wildcard
-        part = "*";
-      } else if(currentMapState[":"]) {
+        part = wildcardAlias;
+      } else if((namedParameter = currentMapState[namedParameterAlias]) !== undefined) {
         // Named Parameters
-        context.params[currentMapState[":"].name] = part;
-        part = ":";
+        context.params[namedParameter.name] = part;
+        part = namedParameterAlias;
       }
     }
 
@@ -43,14 +45,15 @@ const run = (instance, path) => {
   }
 
   // Handler not in Map
-  if(currentMapState['@'] === undefined) {
+  if(currentMapState[componentAlias] === undefined) {
     run(instance, instance.default);
     return false;
   }
 
+  // Setup current information
   instance.current = {
     path: path,
-    component: currentMapState['@']
+    component: currentMapState[componentAlias]
   };
 
   // Setup Route Context
