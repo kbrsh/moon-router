@@ -1,7 +1,7 @@
 const setup = (instance, mode) => {
   let getPath = null;
   let navigate = null;
-  let listener = null;
+  let custom = false;
 
   if(mode === undefined) {
     // Setup Path Getter
@@ -44,9 +44,7 @@ const setup = (instance, mode) => {
     }
 
     // Create listener
-    listener = function(route) {
-      instance.navigate(route);
-    }
+    custom = true;
   }
 
   const initPath = getPath();
@@ -57,7 +55,7 @@ const setup = (instance, mode) => {
 
   instance.getPath = getPath;
   instance.navigate = navigate;
-  instance.listener = listener;
+  instance.custom = custom;
 
   navigate(initPath);
 }

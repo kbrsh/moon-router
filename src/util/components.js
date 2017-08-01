@@ -18,11 +18,15 @@ const registerComponents = (instance, Moon) => {
         eventListeners: {}
       };
 
-      if(instance.listener !== null) {
+      const same = instance.current.path === to;
+
+      if(instance.custom === true) {
         data["href"] = instance.base + to;
         meta.eventListeners.click = [function(event) {
           event.preventDefault();
-          instance.listener(to);
+          if(same === false) {
+            instance.navigate(to);
+          }
         }];
       } else {
         data["href"] = `#${to}`;
@@ -30,7 +34,7 @@ const registerComponents = (instance, Moon) => {
 
       delete data["to"];
 
-      if(to === instance.current.path) {
+      if(same === true) {
         if(data["class"] === undefined) {
           data["class"] = instance.activeClass;
         } else {

@@ -27,7 +27,7 @@
     var setup = function (instance, mode) {
       var getPath = null;
       var navigate = null;
-      var listener = null;
+      var custom = false;
     
       if(mode === undefined) {
         // Setup Path Getter
@@ -70,9 +70,7 @@
         }
     
         // Create listener
-        listener = function(route) {
-          instance.navigate(route);
-        }
+        custom = true;
       }
     
       var initPath = getPath();
@@ -83,7 +81,7 @@
     
       instance.getPath = getPath;
       instance.navigate = navigate;
-      instance.listener = listener;
+      instance.custom = custom;
     
       navigate(initPath);
     }
@@ -108,11 +106,15 @@
             eventListeners: {}
           };
     
-          if(instance.listener !== null) {
+          var same = instance.current.path === to;
+    
+          if(instance.custom === true) {
             data["href"] = instance.base + to;
             meta.eventListeners.click = [function(event) {
               event.preventDefault();
-              instance.listener(to);
+              if(same === false) {
+                instance.navigate(to);
+              }
             }];
           } else {
             data["href"] = "#" + to;
@@ -120,7 +122,7 @@
     
           delete data["to"];
     
-          if(to === instance.current.path) {
+          if(same === true) {
             if(data["class"] === undefined) {
               data["class"] = instance.activeClass;
             } else {
