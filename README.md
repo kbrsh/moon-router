@@ -41,8 +41,9 @@ Moon.use(MoonRouter)
 #### Creating Routes
 
 **Before** you create your Moon instance, define your routes like this:
+
 ```js
-var router = new MoonRouter({
+const router = new MoonRouter({
   default: "/",
   map: {
     "/": "Root",
@@ -55,12 +56,29 @@ This will map `/` to the `Root` component, and will map `/hello` to the `Hello` 
 
 The `default` route is `/`, if a URL is not found, Moon will display this route.
 
+##### Base
+
+If you want routes to be relative to another base, (the default is `""`, meaning the base is `"/"`), you can provide a base. For example:
+
+```js
+const router = new MoonRouter({
+  base: "/app",
+  default: "/",
+  map: {
+    "/": "Root",
+    "/hello": "Hello"
+  }
+});
+```
+
+This will route  `"/app/"` to `"Root"`, and `"/app/hello"` to `"Hello"`.
+
 ##### Dynamic Routes
 
 Routes can also be dynamic, with support for query parameters, named parameters, and wildcards. These can be accessed via a `route` prop passed to the view component.
 
 ```js
-var router = new MoonRouter({
+const router = new MoonRouter({
   map: {
     "/:named": "Root", // `named` can be shown with {{route.params.named}}
     "/:other/parameter/that/is/:named": "Named",
