@@ -1,8 +1,3 @@
-const wildcardAlias = "*";
-const queryAlias = "?";
-const namedParameterAlias = ":";
-const componentAlias = "@";
-
 const map = (routes) => {
   let routesMap = {};
 

@@ -1,71 +1,32 @@
-//=require ./util/run.js
-//=require ./util/map.js
+let Moon = null;
 
-function MoonRouter(opts) {
+//=require ./util/constants.js
+//=require ./util/setup.js
+//=require ./util/components.js
+//=require ./util/map.js
+//=require ./util/run.js
+
+function MoonRouter(options) {
   // Moon Instance
   this.instance = null;
 
   // Default Route
-  this.default = opts.default || "/";
+  this.default = options.default || "/";
 
   // Route to Component Map
-  this.map = map(opts.map) || {};
-
-  // Current Path
-  const initPath = window.location.hash.slice(1);
-  this.current = {
-    path: initPath || "/",
-    component: null
-  };
-  if(initPath !== this.current.path) {
-    window.location.hash = this.current.path;
-  }
+  this.map = map(options.map) || {};
 
   // Route Context
   this.route = {};
 
   // Active Class
-  this.activeClass = opts.activeClass || "router-link-active";
+  this.activeClass = options.activeClass || "router-link-active";
 
-  // Alias to Access Instance
-  let self = this;
-
-  // Setup Router View Component
-  MoonRouter.Moon.component("router-view", {
-    functional: true,
-    render: function(m) {
-      return m(self.current.component, {attrs: {route: self.route}}, {shouldRender: true}, []);
-    }
-  });
-
-  // Setup Router Link Component
-  MoonRouter.Moon.component("router-link", {
-    functional: true,
-    render: function(m, state) {
-      const data = state.data;
-      const to = data["to"];
-      data["href"] = `#${to}`;
-      delete data["to"];
-
-      if(to === self.current.path) {
-        if(data["class"] === undefined) {
-          data["class"] = self.activeClass;
-        } else {
-          data["class"] += ` ${self.activeClass}`;
-        }
-      }
-
-      return m('a', {attrs: data}, {shouldRender: true}, state.slots["default"]);
-    }
-  });
-
-  // Attach Event Listener
-  window.onhashchange = function() {
-    run(self, window.location.hash.slice(1) || window.location.pathname);
-  }
+  // Register Components
+  registerComponents(this, Moon);
 
   // Initialize Route
-  run(this, this.current.path);
+  setup(this, options.mode);
 }
 
 // Install MoonRouter to Moon Instance
@@ -74,12 +35,11 @@ MoonRouter.prototype.install = function(instance) {
 }
 
 // Init for Plugin
-MoonRouter.init = (Moon) => {
-  // Bind Current Moon to Moon Router
-  MoonRouter.Moon = Moon;
-  var MoonInit = Moon.prototype.init;
+MoonRouter.init = (_Moon) => {
+  Moon = _Moon;
 
   // Edit init for Moon to install Moon Router when given as an option
+  var MoonInit = Moon.prototype.init;
   Moon.prototype.init = function() {
     if(this.$options.router !== undefined) {
       this.$router = this.$options.router;
