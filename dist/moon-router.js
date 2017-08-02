@@ -72,7 +72,7 @@
         // Create listener
         custom = true;
         window.addEventListener("popstate", function() {
-          instance.navigate(instance.getPath());
+          run(instance, instance.getPath());
         });
       }
     
