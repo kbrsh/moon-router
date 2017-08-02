@@ -4,6 +4,7 @@ module.exports = function(config) {
     frameworks: ['mocha'],
 
     files: [
+      './core/intercept.js',
       '../dist/moon-router.js',
       '../node_modules/moonjs/dist/moon.min.js',
       '../node_modules/chai/chai.js',

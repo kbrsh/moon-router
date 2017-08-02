@@ -90,6 +90,7 @@ describe("Route", function() {
     // Poll to ensure history tests are done
     var checkHistory = function(done) {
       if(historyDone[0] === true && historyDone[1] === true && historyDone[2] === true && historyDone[3] === true) {
+        window.removeEventListener("popstate");
         done();
       } else {
         setInterval(function() {
