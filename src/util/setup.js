@@ -45,6 +45,9 @@ const setup = (instance, mode) => {
 
     // Create listener
     custom = true;
+    window.addEventListener("popstate", function() {
+      instance.navigate(instance.getPath());
+    });
   }
 
   const initPath = getPath();
