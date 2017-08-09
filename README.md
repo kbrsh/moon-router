@@ -163,4 +163,4 @@ The `router-view` is a component that will display the current mapped route.
 
 ### License
 
-Licensed under the [MIT License](https://kingpixil.github.io/license) By [Kabir Shah](https://kabir.ml)
+Licensed under the [MIT License](https://kbrsh.github.io/license) By [Kabir Shah](https://kabir.ml)

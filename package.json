@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KingPixil/moon-router.git"
+    "url": "git+https://github.com/kbrsh/moon-router.git"
   },
   "keywords": [
     "moon",
@@ -21,9 +21,9 @@
   "author": "Kabir Shah",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/KingPixil/moon-router/issues"
+    "url": "https://github.com/kbrsh/moon-router/issues"
   },
-  "homepage": "https://github.com/KingPixil/moon-router#readme",
+  "homepage": "https://github.com/kbrsh/moon-router#readme",
   "devDependencies": {
     "chai": "^4.1.0",
     "gulp": "^3.9.1",
