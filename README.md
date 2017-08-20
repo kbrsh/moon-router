@@ -2,7 +2,7 @@
 
 A router plugin for Moon.
 
-[![Build Status](https://travis-ci.org/KingPixil/moon-router.svg?branch=master)](https://travis-ci.org/KingPixil/moon-router)
+[![Build Status](https://travis-ci.org/kbrsh/moon-router.svg?branch=master)](https://travis-ci.org/kbrsh/moon-router)
 
 ### What?
 
