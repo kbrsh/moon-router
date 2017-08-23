@@ -2,7 +2,7 @@
  * Moon Router v0.1.3
  * Copyright 2016-2017 Kabir Shah
  * Released under the MIT License
- * https://github.com/KingPixil/moon-router
+ * https://github.com/kbrsh/moon-router
  */
 
 (function(root, factory) {

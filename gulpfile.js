@@ -16,7 +16,7 @@ var comment = `/**
  * Moon Router v${pkg.version}
  * Copyright 2016-2017 Kabir Shah
  * Released under the MIT License
- * https://github.com/KingPixil/moon-router
+ * https://github.com/kbrsh/moon-router
  */\r\n`;
 
 // Build Moon Router
