@@ -39,6 +39,6 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-spec-reporter": "0.0.31",
     "mocha": "^3.4.2",
-    "moonjs": "latest"
+    "moonjs": "github:kbrsh/moon"
   }
 }
