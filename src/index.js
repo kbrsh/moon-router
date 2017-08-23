@@ -50,9 +50,9 @@ MoonRouter.init = (_Moon) => {
   // Edit init for Moon to install Moon Router when given as an option
   var MoonInit = Moon.prototype.init;
   Moon.prototype.init = function() {
-    if(this.$options.router !== undefined) {
-      this.$router = this.$options.router;
-      this.$router.install(this);
+    if(this.options.router !== undefined) {
+      this.router = this.options.router;
+      this.router.install(this);
     }
     MoonInit.apply(this, arguments);
   }
