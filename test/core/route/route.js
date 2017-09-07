@@ -5,7 +5,7 @@ describe("Route", function() {
     var el = createTestElement("history", "<router-link to='/test' class='router-link-class'></router-link><router-view></router-view>");
     var component = null;
 
-    Moon.component("Root", {
+    Moon.extend("Root", {
       template: "<h1>Root Route {{msg}}</h1>",
       data: function() {
         return {
@@ -19,7 +19,7 @@ describe("Route", function() {
       }
     });
 
-    Moon.component("Test", {
+    Moon.extend("Test", {
       template: "<h1>Test Route</h1>"
     });
 
@@ -40,7 +40,7 @@ describe("Route", function() {
     });
 
     var app = new Moon({
-      el: "#history",
+      root: "#history",
       router: router
     });
 
@@ -104,7 +104,7 @@ describe("Route", function() {
         el = createTestElement("route", "<router-link to='/test/wildcard/named?queryParam=true' class='router-link-class'></router-link><router-view></router-view>");
         component = null;
 
-        Moon.component("Root", {
+        Moon.extend("Root", {
           template: "<h1>Root Route {{msg}}</h1>",
           data: function() {
             return {
@@ -118,7 +118,7 @@ describe("Route", function() {
           }
         });
 
-        Moon.component("Test", {
+        Moon.extend("Test", {
           props: ["route"],
           template: "<h1>Test Route {{route.query.queryParam}} {{route.params.namedParam}}</h1>"
         });
@@ -132,7 +132,7 @@ describe("Route", function() {
         });
 
         app = new Moon({
-          el: "#route",
+          root: "#route",
           router: router
         });
 

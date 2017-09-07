@@ -91,21 +91,21 @@
     
     var registerComponents = function (instance, Moon) {
       // Router View Component
-      Moon.component("router-view", {
+      Moon.extend("router-view", {
         functional: true,
         render: function(m) {
-          return m(instance.current.component, {attrs: {route: instance.route}}, {shouldRender: true}, []);
+          return m(instance.current.component, {attrs: {route: instance.route}}, {dynamic: 1}, []);
         }
       });
     
       // Router Link Component
-      Moon.component("router-link", {
+      Moon.extend("router-link", {
         functional: true,
         render: function(m, state) {
           var data = state.data;
           var to = data["to"];
           var meta = {
-            shouldRender: true
+            dynamic: 1
           };
     
           var same = instance.current.path === to;
@@ -134,7 +134,7 @@
             }
           }
     
-          return m('a', {attrs: data}, meta, state.slots["default"]);
+          return m('a', {attrs: data}, meta, state.insert);
         }
       });
     }
