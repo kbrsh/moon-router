@@ -17,7 +17,7 @@ $ npm install moon-router
 ```
 
 ```js
-var MoonRouter = require("moon-router");
+const MoonRouter = require("moon-router");
 Moon.use(MoonRouter)
 ```
 
