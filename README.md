@@ -56,23 +56,6 @@ This will map `/` to the `Root` component, and will map `/hello` to the `Hello` 
 
 The `default` route is `/`, if a URL is not found, Moon will display this route.
 
-##### Base
-
-If you want routes to be relative to another base, (the default is `""`, meaning the base is `"/"`), you can provide a base. For example:
-
-```js
-const router = new MoonRouter({
-  base: "/app",
-  default: "/",
-  map: {
-    "/": "Root",
-    "/hello": "Hello"
-  }
-});
-```
-
-This will route  `"/app/"` to `"Root"`, and `"/app/hello"` to `"Hello"`.
-
 ##### History Mode
 
 Moon Router will use "hash" mode by default, meaning the URL will look something like: `/#/`. If you want routes to look more realistic, you must provide a `mode` option.
@@ -138,16 +121,20 @@ Moon.component("Hello", {
 
 You will notice the `router-link` component. This is by default, rendered as an `a` tag, and should **always be used** to link to routes. A class of `router-link-active` will be applied to the active link by default, unless another class is provided in `options.activeClass`.
 
-When clicking on this link, the user will be shown the new route at the `router-view` component (see below), and will not actually be going to a new page.
+When clicking on this link, the user will be shown the new route at the `router-view` component (see below), and the page will not reload.
 
 #### Installing Router to Instance
 
-When creating your Moon instance, add the Moon Router instance as the option `router`
+When creating your Moon instance, call the `init` method on the router inside of the `mounted` hook to bind the instance to the router.
 
 ```js
 new Moon({
   el: "#app",
-  router: router
+  hooks: {
+    mounted() {
+      router.init(this);
+    }
+  }
 });
 ```
 
@@ -159,7 +146,7 @@ new Moon({
 
 This will install the Moon Router to the Moon Instance, and when you visit the page, you will notice the URL changes to `/#/`
 
-The `router-view` is a component that will display the current mapped route.
+The `router-view` is a `span` with a child component that corresponds with the current route.
 
 ### License
 

@@ -10,7 +10,7 @@ const map = (routes) => {
       let part = parts[i];
 
       // Found named parameter
-      if(part[0] === ":") {
+      if(part[0] === namedParameterAlias) {
         let param = currentMapState[namedParameterAlias];
         if(param === undefined) {
           currentMapState[namedParameterAlias] = {
