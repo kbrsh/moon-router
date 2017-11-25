@@ -7,65 +7,49 @@
 
 (function(root, factory) {
   /* ======= Global Moon Router ======= */
-  (typeof module === "object" && module.exports) ? module.exports = factory() : root.MoonRouter = factory();
+  if(typeof module === "undefined") {
+    root.MoonRouter = factory();
+  } else {
+    module.exports = factory();
+  }
 }(this, function() {
-    var Moon = null;
+    var Moon;
     
     var wildcardAlias = "*";
     var queryAlias = "?";
     var namedParameterAlias = ":";
     var componentAlias = "@";
     
-    var defineProperty = function(obj, prop, value, def) {
-      if(value === undefined) {
-        obj[prop] = def;
-      } else {
-        obj[prop] = value;
-      }
-    }
-    
     var setup = function (instance, mode) {
-      var getPath = null;
-      var navigate = null;
+      var getPath;
+      var navigate;
       var custom = false;
     
-      if(mode === undefined) {
+      if(mode === undefined || mode === "hash") {
         // Setup Path Getter
         getPath = function() {
-          var path = window.location.hash.slice(1);
-    
-          if(path.length === 0) {
-            path = "/";
-          }
-    
-          return path;
+          return window.location.hash.substring(1);
         }
     
         // Create navigation function
         navigate = function(route) {
-          window.location.hash = route;
+          window.location.hash = '#' + route;
           run(instance, route);
         }
     
         // Add hash change listener
         window.addEventListener("hashchange", function() {
-          instance.navigate(instance.getPath());
+          run(instance, instance.getPath());
         });
       } else if(mode === "history") {
         // Setup Path Getter
         getPath = function() {
-          var path = window.location.pathname.substring(instance.base.length);
-    
-          if(path.length === 0) {
-            path = "/";
-          }
-    
-          return path;
+          return window.location.pathname;
         }
     
         // Create navigation function
         navigate = function(route) {
-          history.pushState(null, null, instance.base + route);
+          history.pushState(null, null, route);
           run(instance, route);
         }
     
@@ -76,43 +60,51 @@
         });
       }
     
-      var initPath = getPath();
-      instance.current = {
-        path: initPath,
-        component: null
-      };
-    
       instance.getPath = getPath;
       instance.navigate = navigate;
       instance.custom = custom;
-    
-      navigate(initPath);
     }
     
     var registerComponents = function (instance, Moon) {
-      // Router View Component
+      // Router View component
       Moon.extend("router-view", {
-        functional: true,
+        data: function() {
+          return {
+            component: undefined
+          }
+        },
         render: function(m) {
-          return m(instance.current.component, {attrs: {route: instance.route}}, {dynamic: 1}, []);
+          var currentComponent = this.get("component");
+          var children;
+    
+          if(currentComponent === undefined) {
+            children = [];
+          } else {
+            children = [m(currentComponent, {attrs: {route: instance.route}}, {}, [])];
+          }
+    
+          return m("span", {}, {}, children);
+        },
+        hooks: {
+          init: function init() {
+            instance.components.push(this);
+          }
         }
       });
     
-      // Router Link Component
+      // Router Link component
       Moon.extend("router-link", {
-        functional: true,
-        render: function(m, state) {
-          var data = state.data;
-          var to = data["to"];
-          var meta = {
-            dynamic: 1
-          };
+        props: ["to"],
+        render: function(m) {
+          var to = this.get("to");
+          var attrs = {};
+          var meta = {};
     
-          var same = instance.current.path === to;
+          var same = instance.current === to;
     
           if(instance.custom === true) {
-            data["href"] = instance.base + to;
-            meta.eventListeners = {
+            attrs.href = to;
+            meta.events = {
               "click": [function(event) {
                 event.preventDefault();
                 if(same === false) {
@@ -121,20 +113,19 @@
               }]
             };
           } else {
-            data["href"] = "#" + to;
+            attrs.href = '#' + to;
           }
-    
-          delete data["to"];
     
           if(same === true) {
-            if(data["class"] === undefined) {
-              data["class"] = instance.activeClass;
-            } else {
-              data["class"] += " " + (instance.activeClass);
-            }
+            attrs["class"] = instance.activeClass;
           }
     
-          return m('a', {attrs: data}, meta, state.insert);
+          return m('a', {attrs: attrs}, meta, this.insert);
+        },
+        hooks: {
+          init: function init$1() {
+            instance.components.push(this);
+          }
         }
       });
     }
@@ -145,25 +136,25 @@
       for(var route in routes) {
         var currentMapState = routesMap;
     
-        // Split up by Parts
-        var parts = route.slice(1).split("/");
+        // Split up by parts
+        var parts = route.substring(1).split("/");
         for(var i = 0; i < parts.length; i++) {
           var part = parts[i];
     
-          // Found Named Parameter
+          // Found named parameter
           if(part[0] === ":") {
             var param = currentMapState[namedParameterAlias];
             if(param === undefined) {
               currentMapState[namedParameterAlias] = {
-                name: part.slice(1)
+                name: part.substring(1)
               };
             } else {
-              param.name = part.slice(1);
+              param.name = part.substring(1);
             }
     
             currentMapState = currentMapState[namedParameterAlias];
           } else {
-            // Add Part to Map
+            // Add part to map
             if(currentMapState[part] === undefined) {
                 currentMapState[part] = {};
             }
@@ -172,7 +163,7 @@
           }
         }
     
-        // Add Component
+        // Add component
         currentMapState["@"] = routes[route];
       }
     
@@ -180,7 +171,7 @@
     }
     
     var run = function (instance, path) {
-      // Change Current Component and Build
+      // Change current component and build
       var parts = path.slice(1).split("/");
       var currentMapState = instance.map;
       var context = {
@@ -203,46 +194,48 @@
         }
     
         if(currentMapState[part] === undefined) {
-          var namedParameter = null;
+          var namedParameter = currentMapState[namedParameterAlias];
     
-          if(currentMapState[wildcardAlias] !== undefined) {
-            // Wildcard
-            part = wildcardAlias;
-          } else if((namedParameter = currentMapState[namedParameterAlias]) !== undefined) {
-            // Named Parameters
+          if(namedParameter !== undefined) {
+            // Named Parameter
             context.params[namedParameter.name] = part;
             part = namedParameterAlias;
+          } else if(currentMapState[wildcardAlias] !== undefined) {
+            // Wildcard
+            part = wildcardAlias;
           }
         }
     
-        // Move through State
+        // Move through state
         currentMapState = currentMapState[part];
     
-        // Path Not In Map
+        // Path not in map
         if(currentMapState === undefined) {
           run(instance, instance.default);
           return false;
         }
       }
     
-      // Handler not in Map
+      // Handler not in map
       if(currentMapState[componentAlias] === undefined) {
         run(instance, instance.default);
         return false;
       }
     
       // Setup current information
-      instance.current = {
-        path: path,
-        component: currentMapState[componentAlias]
-      };
+      instance.current = path;
     
       // Setup Route Context
       instance.route = context;
     
-      // Build Moon Instance
-      if(instance.instance !== null) {
-        instance.instance.build();
+      // Build Instance
+      instance.instance.build();
+    
+      // Build components
+      var component = currentMapState[componentAlias];
+      var components = instance.components;
+      for(var i$1 = 0; i$1 < components.length; i$1++) {
+        components[i$1].set("component", component);
       }
     
       return true;
@@ -250,16 +243,18 @@
     
     
     function MoonRouter(options) {
-      // Moon Instance
-      this.instance = null;
+      // Instance
+      this.instance = undefined;
     
-      // Base
-      defineProperty(this, "base", options.base, "");
+      // Default route
+      var defaultRoute = options["default"];
+      if(defaultRoute === undefined) {
+        this["default"] = "/";
+      } else {
+        this["default"] = defaultRoute;
+      }
     
-      // Default Route
-      defineProperty(this, "default", options["default"], "/");
-    
-      // Route to Component Map
+      // Route to component map
       var providedMap = options.map;
       if(providedMap === undefined) {
         this.map = {};
@@ -267,37 +262,36 @@
         this.map = map(providedMap);
       }
     
-      // Route Context
+      // Route context
       this.route = {};
     
-      // Active Class
-      defineProperty(this, "activeClass", options["activeClass"], "router-link-active");
+      // Components
+      this.components = [];
     
-      // Register Components
+      // Active class
+      var activeClass = options.activeClass;
+      if(activeClass === undefined) {
+        this.activeClass = "router-link-active";
+      } else {
+        this.activeClass = activeClass;
+      }
+    
+      // Register components
       registerComponents(this, Moon);
     
-      // Initialize Route
+      // Initialize route
       setup(this, options.mode);
     }
     
-    // Install MoonRouter to Moon Instance
-    MoonRouter.prototype.install = function(instance) {
+    // Install router to instance
+    MoonRouter.prototype.init = function(instance) {
       this.instance = instance;
+      this.navigate(this.getPath());
     }
     
-    // Init for Plugin
+    // Plugin init
     MoonRouter.init = function (_Moon) {
       Moon = _Moon;
-    
-      // Edit init for Moon to install Moon Router when given as an option
-      var MoonInit = Moon.prototype.init;
-      Moon.prototype.init = function() {
-        if(this.options.router !== undefined) {
-          this.router = this.options.router;
-          this.router.install(this);
-        }
-        MoonInit.apply(this, arguments);
-      }
     }
     
     return MoonRouter;

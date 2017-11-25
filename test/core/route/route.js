@@ -2,7 +2,7 @@ describe("Route", function() {
   var historyDone = [false, false, false, false];
 
   describe("History Mode", function() {
-    var el = createTestElement("history", "<router-link to='/test' class='router-link-class'></router-link><router-view></router-view>");
+    var el = createTestElement("history", "<router-link to='/context.html/test'></router-link><router-view></router-view>");
     var component = null;
 
     Moon.extend("Root", {
@@ -23,31 +23,28 @@ describe("Route", function() {
       template: "<h1>Test Route</h1>"
     });
 
-    var base = window.location.pathname;
-
-    if(base[base.length - 1] === "/") {
-      base = base.slice(0, -1);
-    }
-
     var router = new MoonRouter({
-      default: "/",
-      map: {
-        "/": "Root",
-        "/test": "Test"
+      "default": "/context.html",
+      "map": {
+        "/context.html": "Root",
+        "/context.html/test": "Test"
       },
-      mode: "history",
-      base: base
+      "mode": "history"
     });
 
     var app = new Moon({
       root: "#history",
-      router: router
+      hooks: {
+        mounted: function() {
+          router.init(this);
+        }
+      }
     });
 
     it("should initialize a router view", function() {
       return wait(function() {
-        expect(el.firstChild.nextSibling.nodeName).to.equal("H1");
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Root Route Message");
+        expect(el.firstChild.nextSibling.firstChild.nodeName).to.equal("H1");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Root Route Message");
         historyDone[0] = true;
       });
     });
@@ -55,27 +52,26 @@ describe("Route", function() {
     it("should update with data", function() {
       component.set("msg", "Changed");
       return wait(function() {
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Root Route Changed");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Root Route Changed");
         historyDone[1] = true;
       });
     });
 
     it("should navigate with router link", function() {
-      expect(el.firstChild.getAttribute("class")).to.equal("router-link-class");
       el.firstChild.click();
       return wait(function() {
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Test Route");
-        expect(el.firstChild.getAttribute("class")).to.equal("router-link-class router-link-active");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Test Route");
+        expect(el.firstChild.getAttribute("class")).to.equal("router-link-active");
         historyDone[2] = true;
       });
     });
 
     it("should navigate from code", function() {
-      expect(el.firstChild.getAttribute("class")).to.equal("router-link-class router-link-active");
-      router.navigate("/");
+      expect(el.firstChild.getAttribute("class")).to.equal("router-link-active");
+      router.navigate("/context.html");
       return wait(function() {
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Root Route Message");
-        expect(el.firstChild.getAttribute("class")).to.equal("router-link-class");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Root Route Message");
+        expect(el.firstChild.getAttribute("class")).to.equal(null);
         historyDone[3] = true;
       });
     });
@@ -124,8 +120,8 @@ describe("Route", function() {
         });
 
         router = new MoonRouter({
-          default: "/",
-          map: {
+          "default": "/",
+          "map": {
             "/": "Root",
             "/test/*/:namedParam": "Test"
           }
@@ -133,7 +129,11 @@ describe("Route", function() {
 
         app = new Moon({
           root: "#route",
-          router: router
+          hooks: {
+            mounted: function() {
+              router.init(this);
+            }
+          }
         });
 
         done();
@@ -142,33 +142,33 @@ describe("Route", function() {
 
     it("should initialize a router view", function() {
       return wait(function() {
-        expect(el.firstChild.nextSibling.nodeName).to.equal("H1");
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Root Route Message");
+        expect(el.firstChild.nextSibling.firstChild.nodeName).to.equal("H1");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Root Route Message");
       });
     });
 
     it("should update with data", function() {
       component.set("msg", "Changed");
       return wait(function() {
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Root Route Changed");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Root Route Changed");
       });
     });
 
     it("should navigate with router link", function() {
-      expect(el.firstChild.getAttribute("class")).to.equal("router-link-class");
+      expect(el.firstChild.getAttribute("class")).to.equal(null);
       el.firstChild.click();
       return wait(function() {
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Test Route true named");
-        expect(el.firstChild.getAttribute("class")).to.equal("router-link-class router-link-active");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Test Route true named");
+        expect(el.firstChild.getAttribute("class")).to.equal("router-link-active");
       });
     });
 
     it("should navigate from code", function() {
-      expect(el.firstChild.getAttribute("class")).to.equal("router-link-class router-link-active");
+      expect(el.firstChild.getAttribute("class")).to.equal("router-link-active");
       router.navigate("/");
       return wait(function() {
-        expect(el.firstChild.nextSibling.innerHTML).to.equal("Root Route Message");
-        expect(el.firstChild.getAttribute("class")).to.equal("router-link-class");
+        expect(el.firstChild.nextSibling.firstChild.innerHTML).to.equal("Root Route Message");
+        expect(el.firstChild.getAttribute("class")).to.equal(null);
       });
     });
   });

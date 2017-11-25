@@ -1,5 +1,5 @@
 const run = (instance, path) => {
-  // Change Current Component and Build
+  // Change current component and build
   const parts = path.slice(1).split("/");
   let currentMapState = instance.map;
   let context = {
@@ -22,46 +22,48 @@ const run = (instance, path) => {
     }
 
     if(currentMapState[part] === undefined) {
-      let namedParameter = null;
+      let namedParameter = currentMapState[namedParameterAlias];
 
-      if(currentMapState[wildcardAlias] !== undefined) {
-        // Wildcard
-        part = wildcardAlias;
-      } else if((namedParameter = currentMapState[namedParameterAlias]) !== undefined) {
-        // Named Parameters
+      if(namedParameter !== undefined) {
+        // Named Parameter
         context.params[namedParameter.name] = part;
         part = namedParameterAlias;
+      } else if(currentMapState[wildcardAlias] !== undefined) {
+        // Wildcard
+        part = wildcardAlias;
       }
     }
 
-    // Move through State
+    // Move through state
     currentMapState = currentMapState[part];
 
-    // Path Not In Map
+    // Path not in map
     if(currentMapState === undefined) {
       run(instance, instance.default);
       return false;
     }
   }
 
-  // Handler not in Map
+  // Handler not in map
   if(currentMapState[componentAlias] === undefined) {
     run(instance, instance.default);
     return false;
   }
 
   // Setup current information
-  instance.current = {
-    path: path,
-    component: currentMapState[componentAlias]
-  };
+  instance.current = path;
 
   // Setup Route Context
   instance.route = context;
 
-  // Build Moon Instance
-  if(instance.instance !== null) {
-    instance.instance.build();
+  // Build Instance
+  instance.instance.build();
+
+  // Build components
+  const component = currentMapState[componentAlias];
+  const components = instance.components;
+  for(let i = 0; i < components.length; i++) {
+    components[i].set("component", component);
   }
 
   return true;

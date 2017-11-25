@@ -1,27 +1,43 @@
 const registerComponents = (instance, Moon) => {
-  // Router View Component
+  // Router View component
   Moon.extend("router-view", {
-    functional: true,
+    data: function() {
+      return {
+        component: undefined
+      }
+    },
     render: function(m) {
-      return m(instance.current.component, {attrs: {route: instance.route}}, {dynamic: 1}, []);
+      const currentComponent = this.get("component");
+      let children;
+
+      if(currentComponent === undefined) {
+        children = [];
+      } else {
+        children = [m(currentComponent, {attrs: {route: instance.route}}, {}, [])];
+      }
+
+      return m("span", {}, {}, children);
+    },
+    hooks: {
+      init() {
+        instance.components.push(this);
+      }
     }
   });
 
-  // Router Link Component
+  // Router Link component
   Moon.extend("router-link", {
-    functional: true,
-    render: function(m, state) {
-      const data = state.data;
-      const to = data["to"];
-      let meta = {
-        dynamic: 1
-      };
+    props: ["to"],
+    render: function(m) {
+      const to = this.get("to");
+      let attrs = {};
+      let meta = {};
 
-      const same = instance.current.path === to;
+      const same = instance.current === to;
 
       if(instance.custom === true) {
-        data["href"] = instance.base + to;
-        meta.eventListeners = {
+        attrs.href = to;
+        meta.events = {
           "click": [function(event) {
             event.preventDefault();
             if(same === false) {
@@ -30,20 +46,19 @@ const registerComponents = (instance, Moon) => {
           }]
         };
       } else {
-        data["href"] = `#${to}`;
+        attrs.href = '#' + to;
       }
-
-      delete data["to"];
 
       if(same === true) {
-        if(data["class"] === undefined) {
-          data["class"] = instance.activeClass;
-        } else {
-          data["class"] += ` ${instance.activeClass}`;
-        }
+        attrs["class"] = instance.activeClass;
       }
 
-      return m('a', {attrs: data}, meta, state.insert);
+      return m('a', {attrs: attrs}, meta, this.insert);
+    },
+    hooks: {
+      init() {
+        instance.components.push(this);
+      }
     }
   });
 }

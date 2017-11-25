@@ -1,45 +1,33 @@
 const setup = (instance, mode) => {
-  let getPath = null;
-  let navigate = null;
+  let getPath;
+  let navigate;
   let custom = false;
 
-  if(mode === undefined) {
+  if(mode === undefined || mode === "hash") {
     // Setup Path Getter
     getPath = function() {
-      let path = window.location.hash.slice(1);
-
-      if(path.length === 0) {
-        path = "/";
-      }
-
-      return path;
+      return window.location.hash.substring(1);
     }
 
     // Create navigation function
     navigate = function(route) {
-      window.location.hash = route;
+      window.location.hash = '#' + route;
       run(instance, route);
     }
 
     // Add hash change listener
     window.addEventListener("hashchange", function() {
-      instance.navigate(instance.getPath());
+      run(instance, instance.getPath());
     });
   } else if(mode === "history") {
     // Setup Path Getter
     getPath = function() {
-      let path = window.location.pathname.substring(instance.base.length);
-
-      if(path.length === 0) {
-        path = "/";
-      }
-
-      return path;
+      return window.location.pathname;
     }
 
     // Create navigation function
     navigate = function(route) {
-      history.pushState(null, null, instance.base + route);
+      history.pushState(null, null, route);
       run(instance, route);
     }
 
@@ -50,15 +38,7 @@ const setup = (instance, mode) => {
     });
   }
 
-  const initPath = getPath();
-  instance.current = {
-    path: initPath,
-    component: null
-  };
-
   instance.getPath = getPath;
   instance.navigate = navigate;
   instance.custom = custom;
-
-  navigate(initPath);
 }

@@ -4,25 +4,25 @@ const map = (routes) => {
   for(let route in routes) {
     let currentMapState = routesMap;
 
-    // Split up by Parts
-    const parts = route.slice(1).split("/");
+    // Split up by parts
+    const parts = route.substring(1).split("/");
     for(let i = 0; i < parts.length; i++) {
       let part = parts[i];
 
-      // Found Named Parameter
+      // Found named parameter
       if(part[0] === ":") {
         let param = currentMapState[namedParameterAlias];
         if(param === undefined) {
           currentMapState[namedParameterAlias] = {
-            name: part.slice(1)
+            name: part.substring(1)
           };
         } else {
-          param.name = part.slice(1);
+          param.name = part.substring(1);
         }
 
         currentMapState = currentMapState[namedParameterAlias];
       } else {
-        // Add Part to Map
+        // Add part to map
         if(currentMapState[part] === undefined) {
             currentMapState[part] = {};
         }
@@ -31,7 +31,7 @@ const map = (routes) => {
       }
     }
 
-    // Add Component
+    // Add component
     currentMapState["@"] = routes[route];
   }
 
