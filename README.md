@@ -6,7 +6,7 @@ A router plugin for Moon.
 
 ### What?
 
-Moon router lets you create basic routes that map to different components. Clicking a `router-link` will update the view, and updates the URL. To the user, it seems like going on a new URL, but in reality, they are on the same page.
+Moon router lets you create routes that map to different components. Clicking special links update the view and the URL as if the user is visiting a new page.
 
 ### Install
 
