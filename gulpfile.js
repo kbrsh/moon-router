@@ -14,7 +14,7 @@ var Server = require("karma").Server;
 
 var comment = `/**
  * Moon Router v${pkg.version}
- * Copyright 2016-2017 Kabir Shah
+ * Copyright 2016-2018 Kabir Shah
  * Released under the MIT License
  * https://github.com/kbrsh/moon-router
  */\r\n`;

@@ -1,6 +1,6 @@
 /**
  * Moon Router v0.1.3
- * Copyright 2016-2017 Kabir Shah
+ * Copyright 2016-2018 Kabir Shah
  * Released under the MIT License
  * https://github.com/kbrsh/moon-router
  */
@@ -142,7 +142,7 @@
           var part = parts[i];
     
           // Found named parameter
-          if(part[0] === ":") {
+          if(part[0] === namedParameterAlias) {
             var param = currentMapState[namedParameterAlias];
             if(param === undefined) {
               currentMapState[namedParameterAlias] = {
