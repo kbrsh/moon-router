@@ -27,10 +27,8 @@
   "devDependencies": {
     "chai": "^4.1.0",
     "gulp": "^3.9.1",
-    "gulp-buble": "^0.8.0",
     "gulp-concat": "^2.6.1",
     "gulp-header": "^1.8.8",
-    "gulp-include": "^2.3.1",
     "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
     "gulp-uglifyjs": "^0.6.2",
@@ -39,6 +37,9 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-spec-reporter": "0.0.31",
     "mocha": "^3.4.2",
-    "moonjs": "github:kbrsh/moon"
+    "moonjs": "github:kbrsh/moon",
+    "rollup-plugin-buble": "^0.18.0",
+    "rollup-stream": "^1.24.1",
+    "vinyl-source-stream": "^2.0.0"
   }
 }

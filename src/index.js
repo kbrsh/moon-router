@@ -1,10 +1,8 @@
-let Moon;
+import {map} from "./util/map.js";
+import {setup} from "./util/setup.js";
+import {registerComponents} from "./util/components.js";
 
-//=require ./util/constants.js
-//=require ./util/setup.js
-//=require ./util/components.js
-//=require ./util/map.js
-//=require ./util/run.js
+let Moon;
 
 function MoonRouter(options) {
   // Instance
@@ -57,3 +55,5 @@ MoonRouter.prototype.init = function(instance) {
 MoonRouter.init = (_Moon) => {
   Moon = _Moon;
 }
+
+export default MoonRouter;
