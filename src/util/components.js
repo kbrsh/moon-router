@@ -1,4 +1,4 @@
-const registerComponents = (instance, Moon) => {
+export const registerComponents = (instance, Moon) => {
   // Router View component
   Moon.extend("router-view", {
     data: function() {

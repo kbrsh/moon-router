@@ -1,4 +1,6 @@
-const setup = (instance, mode) => {
+import {run} from "./run.js";
+
+export const setup = (instance, mode) => {
   let getPath;
   let navigate;
   let custom = false;

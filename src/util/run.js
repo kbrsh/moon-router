@@ -1,4 +1,6 @@
-const run = (instance, path) => {
+import {wildcardAlias, queryAlias, namedParameterAlias, componentAlias} from "./constants.js";
+
+export const run = (instance, path) => {
   // Change current component and build
   const parts = path.slice(1).split("/");
   let currentMapState = instance.map;

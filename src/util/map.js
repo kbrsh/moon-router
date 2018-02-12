@@ -1,4 +1,6 @@
-const map = (routes) => {
+import {namedParameterAlias} from "./constants.js";
+
+export const map = (routes) => {
   let routesMap = {};
 
   for(let route in routes) {

@@ -5,31 +5,25 @@
  * https://github.com/kbrsh/moon-router
  */
 
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.MoonRouter = factory());
-}(this, (function () { 'use strict';
+const wildcardAlias = "*";
+const queryAlias = "?";
+const namedParameterAlias = ":";
+const componentAlias = "@";
 
-var wildcardAlias = "*";
-var queryAlias = "?";
-var namedParameterAlias = ":";
-var componentAlias = "@";
+const map = (routes) => {
+  let routesMap = {};
 
-var map = function (routes) {
-  var routesMap = {};
-
-  for(var route in routes) {
-    var currentMapState = routesMap;
+  for(let route in routes) {
+    let currentMapState = routesMap;
 
     // Split up by parts
-    var parts = route.substring(1).split("/");
-    for(var i = 0; i < parts.length; i++) {
-      var part = parts[i];
+    const parts = route.substring(1).split("/");
+    for(let i = 0; i < parts.length; i++) {
+      let part = parts[i];
 
       // Found named parameter
       if(part[0] === namedParameterAlias) {
-        var param = currentMapState[namedParameterAlias];
+        let param = currentMapState[namedParameterAlias];
         if(param === undefined) {
           currentMapState[namedParameterAlias] = {
             name: part.substring(1)
@@ -56,31 +50,31 @@ var map = function (routes) {
   return routesMap;
 };
 
-var run = function (instance, path) {
+const run = (instance, path) => {
   // Change current component and build
-  var parts = path.slice(1).split("/");
-  var currentMapState = instance.map;
-  var context = {
+  const parts = path.slice(1).split("/");
+  let currentMapState = instance.map;
+  let context = {
     query: {},
     params: {}
   };
 
-  for(var i = 0; i < parts.length; i++) {
-    var part = parts[i];
+  for(let i = 0; i < parts.length; i++) {
+    let part = parts[i];
 
     // Query Parameters
     if(part.indexOf(queryAlias) !== -1) {
-      var splitQuery = part.split(queryAlias);
+      const splitQuery = part.split(queryAlias);
       part = splitQuery.shift();
 
-      for(var j = 0; j < splitQuery.length; j++) {
-        var keyVal = splitQuery[j].split('=');
+      for(let j = 0; j < splitQuery.length; j++) {
+        const keyVal = splitQuery[j].split('=');
         context.query[keyVal[0]] = keyVal[1];
       }
     }
 
     if(currentMapState[part] === undefined) {
-      var namedParameter = currentMapState[namedParameterAlias];
+      let namedParameter = currentMapState[namedParameterAlias];
 
       if(namedParameter !== undefined) {
         // Named Parameter
@@ -118,19 +112,19 @@ var run = function (instance, path) {
   instance.instance.build();
 
   // Build components
-  var component = currentMapState[componentAlias];
-  var components = instance.components;
-  for(var i$1 = 0; i$1 < components.length; i$1++) {
-    components[i$1].set("component", component);
+  const component = currentMapState[componentAlias];
+  const components = instance.components;
+  for(let i = 0; i < components.length; i++) {
+    components[i].set("component", component);
   }
 
   return true;
 };
 
-var setup = function (instance, mode) {
-  var getPath;
-  var navigate;
-  var custom = false;
+const setup = (instance, mode) => {
+  let getPath;
+  let navigate;
+  let custom = false;
 
   if(mode === undefined || mode === "hash") {
     // Setup Path Getter
@@ -172,7 +166,7 @@ var setup = function (instance, mode) {
   instance.custom = custom;
 };
 
-var registerComponents = function (instance, Moon) {
+const registerComponents = (instance, Moon) => {
   // Router View component
   Moon.extend("router-view", {
     data: function() {
@@ -181,8 +175,8 @@ var registerComponents = function (instance, Moon) {
       }
     },
     render: function(m) {
-      var currentComponent = this.get("component");
-      var children;
+      const currentComponent = this.get("component");
+      let children;
 
       if(currentComponent === undefined) {
         children = [];
@@ -193,7 +187,7 @@ var registerComponents = function (instance, Moon) {
       return m("span", {}, {}, children);
     },
     hooks: {
-      init: function() {
+      init() {
         instance.components.push(this);
       }
     }
@@ -203,11 +197,11 @@ var registerComponents = function (instance, Moon) {
   Moon.extend("router-link", {
     props: ["to"],
     render: function(m) {
-      var to = this.get("to");
-      var attrs = {};
-      var meta = {};
+      const to = this.get("to");
+      let attrs = {};
+      let meta = {};
 
-      var same = instance.current === to;
+      const same = instance.current === to;
 
       if(instance.custom === true) {
         attrs.href = to;
@@ -230,21 +224,21 @@ var registerComponents = function (instance, Moon) {
       return m('a', {attrs: attrs}, meta, this.insert);
     },
     hooks: {
-      init: function() {
+      init() {
         instance.components.push(this);
       }
     }
   });
 };
 
-var Moon;
+let Moon;
 
 function MoonRouter(options) {
   // Instance
   this.instance = undefined;
 
   // Default route
-  var defaultRoute = options["default"];
+  const defaultRoute = options["default"];
   if(defaultRoute === undefined) {
     this["default"] = "/";
   } else {
@@ -252,7 +246,7 @@ function MoonRouter(options) {
   }
 
   // Route to component map
-  var providedMap = options.map;
+  const providedMap = options.map;
   if(providedMap === undefined) {
     this.map = {};
   } else {
@@ -266,7 +260,7 @@ function MoonRouter(options) {
   this.components = [];
 
   // Active class
-  var activeClass = options.activeClass;
+  const activeClass = options.activeClass;
   if(activeClass === undefined) {
     this.activeClass = "router-link-active";
   } else {
@@ -287,10 +281,8 @@ MoonRouter.prototype.init = function(instance) {
 };
 
 // Plugin init
-MoonRouter.init = function (_Moon) {
+MoonRouter.init = (_Moon) => {
   Moon = _Moon;
 };
 
-return MoonRouter;
-
-})));
+export default MoonRouter;

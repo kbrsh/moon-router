@@ -1,4 +1,4 @@
-const wildcardAlias = "*";
-const queryAlias = "?";
-const namedParameterAlias = ":";
-const componentAlias = "@";
+export const wildcardAlias = "*";
+export const queryAlias = "?";
+export const namedParameterAlias = ":";
+export const componentAlias = "@";
